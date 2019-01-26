@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  background-color: #fffffa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #3c4859;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Global/Custom Components */
+a {
+  text-decoration: none;
+}
+
+
+.card {
+  padding: 20px;
+  border-left: 3px solid #0facf3;
+  position: relative;
+  box-shadow: 0 10px 15px #cecaca;
+}
+
+.card p {
+  margin-bottom: 15px;
+}
+
+.container {
+  background: #dfe0e2;
+  padding: 50px 40px 130px;
+  position: relative;
+}
+
+table {
+  background: transparent;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-top: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+}
+
+tr {
+  border-left: 3px solid #0facf3;
+}
+
+td .form-element {
+  margin-bottom: 0;
+}
+
+td,
+th {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+
+
+
+
+
+/* Form Card */
+.form-card {
+  width: 45%;
+  background: #fffffa;
+  display: flex;
+  flex-direction: column;
+  padding: 50px 40px;
+  margin-top: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Adjust container size for (width > 500 and width < 769px) */
+@media screen and (min-width: 500px) and (max-width: 768px) {
+  section {
+    padding: 20px 60px;
+  }
+}
