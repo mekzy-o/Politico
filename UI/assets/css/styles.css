@@ -282,7 +282,7 @@ img.avatar {
 
 /* ADMIN PAGE CSS STYLES */
 
- #edit-party {
+ .center-form {
  	margin-top: 80px;
  }
 
@@ -572,7 +572,7 @@ button.petition {
 		width: 100%;
 		border-bottom: none;
 	}
-	#edit-party {
+	.center-form {
 		margin-top: 0;
 	}
 
@@ -585,6 +585,9 @@ button.petition {
 		margin: auto;
 	}
 
+	.stats-table {
+		overflow: hidden;
+	}
 	/* USER PROFILE*/
 
 	.profile {
