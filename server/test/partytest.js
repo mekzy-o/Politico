@@ -39,6 +39,7 @@ describe('/POST parties', () => {
 
 });
 
+
 //Unit testing to GET all parties
 describe('/GET parties', () => {
   it('should list ALL parties on /api/v1/parties GET', (done) => {
@@ -51,6 +52,7 @@ describe('/GET parties', () => {
         done();
       });
   });
+
 });
 
 // Unit testing to GET parties with specified id

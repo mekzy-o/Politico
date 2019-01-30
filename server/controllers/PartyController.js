@@ -17,20 +17,21 @@ class PartyController {
    */
   static createParty (req, res) {
       if(!req.body.name){
-      return res.status(400).send({
-      status: 400,
-      error: "name of party is required"
-    });
-      } else if (!req.body.hqAddress){
         return res.status(400).send({
-      status: 400,
-      error: "hqAddress of party is required"
+        status: 400,
+        error: "name of party is required"
+        });
+      } else if (!req.body.hqAddress){
+          return res.status(400).send({
+          status: 400,
+          error: "hqAddress of party is required"
       });
     }
+
     const party = {
-    id: partyDb.length + 1,
-    name: req.body.name,
-    hqAddress: req.body.hqAddress
+      id: partyDb.length + 1,
+      name: req.body.name,
+      hqAddress: req.body.hqAddress
     }
     partyDb.push(party);
     return res.status(201).send({
