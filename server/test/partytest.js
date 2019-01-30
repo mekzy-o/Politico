@@ -31,9 +31,22 @@ describe('/POST parties', () => {
       .post(partyUrl)
       .send(party)
       .end((err, res) => {
-        console.log(res.body);
         res.should.have.status(201);
         res.should.be.json
+        done();
+      });
+  });
+});
+
+
+describe('/GET parties', () => {
+  it('should list ALL parties on /api/v1/parties GET', (done) => {
+    chai.request(server)
+      .get(partyUrl)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
         done();
       });
   });
