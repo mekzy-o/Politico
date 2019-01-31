@@ -13,4 +13,7 @@ router.get('/api/v1/parties', PartyController.getAllParties);
 //get a party using specific id
 router.get('/api/v1/parties/:id', PartyController.getParty);
 
+//deleting a party
+router.delete('/api/v1/parties/:id', PartyController.deleteParty);
+
 export default router;

@@ -77,6 +77,31 @@ class PartyController {
           });
       }
     }
+
+  /**
+   * @method deleteParty
+   * @description deletes a specific party based on the given ID
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+    static deleteParty (req, res) {
+      let id = req.params.id;
+      let party = partyDb.filter( party => {
+        return party.id == id;
+      })[0];
+      
+      const index = partyDb.indexOf(party);
+
+      if(index !== -1){
+        partyDb.splice(index, 1);
+        res.status(201).json({ 
+        message: `Party with id ${id} deleted.`});
+      } else {
+          res.status(201).json({ 
+          message: `Party with id ${id} not found.`});
+      }
+  }
 }
 
 export default PartyController;
