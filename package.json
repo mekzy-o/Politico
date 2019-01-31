@@ -6,7 +6,8 @@
   "scripts": {
     "test": "nyc --reporter=text mocha -c ./server/test/*.js --exit --require babel-core/register",
     "lint": "eslint server/**/ --fix",
-    "start": "nodemon --exec babel-node app.js"
+    "start": "babel-node app.js",
+    "start:dev": "nodemon --exec babel-node app.js"
   },
   "author": "Emeka Ofe",
   "license": "ISC",
