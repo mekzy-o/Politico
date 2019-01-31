@@ -28,16 +28,16 @@ class PartyController {
       });
     }
 
-    const party = {
+    const data = [{
       id: partyDb.length + 1,
       name: req.body.name,
       hqAddress: req.body.hqAddress
-    }
-    partyDb.push(party);
+    }]
+    partyDb.push(data);
     return res.status(201).send({
     status: 201,
     message: "party added successfully",
-    party
+    data
     });
   }
 
@@ -52,7 +52,7 @@ class PartyController {
     res.status(200).send({
     status: 200,
     message: "parties retrieved successfully",
-    parties: partyDb
+    data: partyDb
     });
   }
 
@@ -63,13 +63,14 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-    static getParty (req, res) {
+  static getParty (req, res) {
       const { id } = req.params;
-      const party = partyDb.find(party => party.id == id);
-        if (party) {
+      let data = partyDb.find(data => data.id == id);
+        if (data) {
           return res.status(200).send({
+          status: 200,
           message: "party retrieved successfully",
-          party,
+          data: [data]
           });
       } else {
           res.status(400).send({
@@ -78,6 +79,7 @@ class PartyController {
       }
     }
 
+
   /**
    * @method deleteParty
    * @description deletes a specific party based on the given ID
@@ -85,41 +87,53 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-    static deleteParty (req, res) {
+   static deleteParty (req, res) {
       let id = req.params.id;
-      let party = partyDb.filter( party => {
-        return party.id == id;
+
+      let data = partyDb.filter( data => {
+      return data.id == id;
       })[0];
-      
-      const index = partyDb.indexOf(party);
+
+      const index = partyDb.indexOf(data);
 
       if(index !== -1){
-        partyDb.splice(index, 1);
-        res.status(201).json({ 
-        message: `Party with id ${id} deleted.`});
+
+      partyDb.splice(index, 1);
+
+      res.status(200).json({ 
+        status: 200,
+        data: [{message: `Party with id ${id} deleted.`}]});
       } else {
-          res.status(201).json({ 
-          message: `Party with id ${id} not found.`});
+        res.status(201).json({ 
+        message: `Party with id ${id} not found.`});
       }
   }
-
-    static updatePartyName (req, res) {
+  
+  /**
+   * @method updatePartyName
+   * @description Updates a specific party based on the given parameters
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  static updatePartyName (req, res) {
       const { id } = req.params;
-      const party = partyDb.find(party => party.id == id);
-      if(party){
-        party.name = req.body.name;
+      const data = partyDb.find(data=> data.id == id);
+      if(data){
+        data.name = req.body.name;
         return res.status(201).send({
         status: 201,
         message: "party added successfully",
-        party
-        });
-      } else {
+        data: [data]
+      });
+    } else {
         return res.status(404).send({
         status: 400,
         error: "name of party not found!"
-        });
-      }
+      });
     }
+  }
+
 }
 
 export default PartyController;
