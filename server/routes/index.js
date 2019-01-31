@@ -2,7 +2,7 @@ import express from 'express';
 import officeDb from '../datastore/officeDb';
 import partyDb from '../datastore/partyDb';
 import PartyController from '../controllers/PartyController';
-import OfficeController from '../controllers/officeController';
+import OfficeController from '../controllers/OfficeController';
 
 const router = express.Router();
 
