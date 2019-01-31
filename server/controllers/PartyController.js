@@ -102,6 +102,24 @@ class PartyController {
           message: `Party with id ${id} not found.`});
       }
   }
+
+    static updatePartyName (req, res) {
+      const { id } = req.params;
+      const party = partyDb.find(party => party.id == id);
+      if(party){
+        party.name = req.body.name;
+        return res.status(201).send({
+        status: 201,
+        message: "party added successfully",
+        party
+        });
+      } else {
+        return res.status(404).send({
+        status: 400,
+        error: "name of party not found!"
+        });
+      }
+    }
 }
 
 export default PartyController;

@@ -16,4 +16,8 @@ router.get('/api/v1/parties/:id', PartyController.getParty);
 //deleting a party
 router.delete('/api/v1/parties/:id', PartyController.deleteParty);
 
+//using patch method to Edit and update party name
+router.patch('/api/v1/parties/:id', PartyController.updatePartyName);
+
+
 export default router;
