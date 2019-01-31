@@ -32,3 +32,17 @@ describe('/POST offices with specified details', () => {
       });
   });
 });
+
+//Unit testing for getting all offices using GET method
+describe('/GET offices', () => {
+  it('should list ALL offices on /api/v1/offices GET', (done) => {
+    chai.request(server)
+      .get(officeUrl)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        done();
+      });
+  });
+});

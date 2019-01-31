@@ -28,4 +28,7 @@ router.patch('/api/v1/parties/:id', PartyController.updatePartyName);
 //create office
 router.post('/api/v1/offices', OfficeController.createOffice);
 
+//get all offices
+router.get('/api/v1/offices', OfficeController.getAllOffices);
+
 export default router;
