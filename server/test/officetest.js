@@ -46,3 +46,18 @@ describe('/GET offices', () => {
       });
   });
 });
+
+//Unit testing for getting a specific office with id
+describe('/GET office with specified id', () => {
+  it('should return 200 for successfully fetching a office', (done) => {
+    const newLength = officeDb.length;
+    chai.request(server)
+        .get(getOneUrl)
+        .send(officeDb)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.json
+          done();
+        });
+    });
+});
