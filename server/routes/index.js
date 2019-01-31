@@ -6,6 +6,11 @@ import OfficeController from '../controllers/OfficeController';
 
 const router = express.Router();
 
+//Setting default response by Heroku
+router.get('/', (req, res) => res.status(200).json({
+	message: "Welcome to API for Politico!"
+}));
+
 /* SETTING UP ENDPOINTS FOR PARTIES*/
 
 //create a party
