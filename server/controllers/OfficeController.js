@@ -51,6 +51,27 @@ class OfficeController {
     });
   }
 
+ /* @method getAnOffice
+   * @description retrieves an office with specific ID 
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  static getOffice (req, res) {
+    const { id } = req.params;
+    const office = officeDb.find(office => office.id == id);
+    if (office) {
+      return res.status(200).send({
+      message: "Office retrieved successfully",
+      office,
+        });
+      } else {
+          res.status(400).send({
+          error: "No Office found with that id"
+          });
+       }
+    }
+
 }
 
 export default OfficeController;

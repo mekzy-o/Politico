@@ -31,4 +31,8 @@ router.post('/api/v1/offices', OfficeController.createOffice);
 //get all offices
 router.get('/api/v1/offices', OfficeController.getAllOffices);
 
+//get a specific party
+router.get('/api/v1/offices/:id', OfficeController.getOffice);
+
+
 export default router;
