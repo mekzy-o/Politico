@@ -123,12 +123,12 @@ class PartyController {
         data.name = req.body.name;
         return res.status(201).send({
         status: 201,
-        message: "party added successfully",
+        message: "party name updated successfully",
         data: [data]
       });
     } else {
         return res.status(404).send({
-        status: 400,
+        status: 404,
         error: "name of party not found!"
       });
     }
