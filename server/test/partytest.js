@@ -71,13 +71,13 @@ describe('/GET party with specified id', () => {
 
 //Unit testing to DELETE parties with specified id
 describe('/DELETE party with specified id', () => {
-  it('should return 201 for a successful business deletion', (done) => {
+  it('should return 200 for a successful business deletion', (done) => {
     const newLength = partyDb.length - 1;
     chai.request(server)
         .delete(deleteUrl)
         .send(partyDb)
         .end((err, res) => {
-          res.should.have.status(201);
+          res.should.have.status(200);
           res.body.should.be.a('object');
           done();
         });

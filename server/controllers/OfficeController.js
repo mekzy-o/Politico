@@ -22,18 +22,18 @@ class OfficeController {
         error: "name of office is required"
       });
     }
-    const office = {
-    	id: officeDb.length + 1,
-    	type: req.body.type,
-    	name: req.body.name
-    }
-    officeDb.push(office);
+    const data = [{
+    id: officeDb.length + 1,
+    type: req.body.type,
+    name: req.body.name
+    }]
+    officeDb.push(data);
     return res.status(201).send({
-    	status: 201,
-    	message: "Office added successfully",
-    	office
-   	});
-  }
+    status: 201,
+    message: "Office added successfully",
+    data
+   });
+ }
 
   /**
    * @method getAllOffices
@@ -47,31 +47,31 @@ class OfficeController {
     res.status(200).send({
     status: 200,
     message: "Offices retrieved successfully",
-    offices: officeDb
+    data: officeDb
     });
   }
 
- /* @method getAnOffice
+ /* @method getOffice
    * @description retrieves an office with specific ID 
    * @param {object} req - The Request Object
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
   static getOffice (req, res) {
-    const { id } = req.params;
-    const office = officeDb.find(office => office.id == id);
-    if (office) {
-      return res.status(200).send({
-      message: "Office retrieved successfully",
-      office,
-        });
+      const { id } = req.params;
+      let data = officeDb.find(data => data.id == id);
+      if (data) {
+          return res.status(200).send({
+          status: 200,
+          message: "party retrieved successfully",
+          data: [data]
+          });
       } else {
-          res.status(400).send({
+          res.status(404).send({
           error: "No Office found with that id"
           });
        }
     }
-
 }
 
 export default OfficeController;
