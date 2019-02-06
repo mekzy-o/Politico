@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import partyDb from '../datastore/partyDb';
+import db from '../db/index';
 
 /**
  * @class PartyController
@@ -15,31 +15,41 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-  static createParty (req, res) {
+  static async createParty (req, res) {
       if(!req.body.name){
         return res.status(400).send({
         status: 400,
         error: "name of party is required"
         });
-      } else if (!req.body.hqAddress){
+      } else if (!req.body.hqaddress){
           return res.status(400).send({
           status: 400,
           error: "hqAddress of party is required"
       });
-    }
+    }  else if (!req.body.logourl){
+      return res.status(400).send({
+      status: 400,
+      error: "Logo Url of party is required"
+  });
+}
 
-    const data = [{
-      id: partyDb.length + 1,
-      name: req.body.name,
-      hqAddress: req.body.hqAddress
-    }]
-    partyDb.push(data);
-    return res.status(201).send({
-    status: 201,
-    message: "party added successfully",
-    data
-    });
-  }
+    const data = 'INSERT INTO parties(name, hqaddress, logourl) VALUES($1, $2, $3) RETURNING *'; 
+    const { name, hqaddress, logourl } = req.body;
+    try {
+      const { rows } = await db.query(data, [name, hqaddress, logourl]);
+       if (rows) {
+        return res.status(201).json({
+          status: 201,
+          data: rows
+        });
+      }
+    } catch (error) {
+        return res.status(500).json({
+          status: 500,
+          message: error.message
+        });
+      }
+    }
 
   /**
    * @method getAllParties
@@ -48,12 +58,21 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-  static getAllParties (req, res) {
-    res.status(200).send({
-    status: 200,
-    message: "parties retrieved successfully",
-    data: partyDb
-    });
+
+  static async getAllParties (req, res) {
+    try {
+      const { rows } = await db.query('SELECT * FROM parties ORDER BY id ASC');
+      return res.status(200).json({
+        status: 200,
+        data: rows
+        });
+     } catch(error) {
+        const { message } = error;
+          return res.status(500).json({
+           status: 500,
+           message
+      });
+    }
   }
 
   /**
@@ -63,22 +82,29 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-  static getParty (req, res) {
-      const { id } = req.params;
-      let data = partyDb.find(data => data.id == id);
-        if (data) {
-          return res.status(200).send({
-          status: 200,
-          message: "party retrieved successfully",
-          data: [data]
+  static async getParty (req, res) {
+    const data = 'SELECT * FROM parties WHERE id = $1';
+      let id = parseInt(req.params.id, 10);
+      try {
+        const { rows } = await db.query(data, [id]);
+        if(!rows[0]){
+          return res.status(404).json({
+            status: 404,
+            error: "Party with that id not found"
           });
-      } else {
-          res.status(400).send({
-          error: "no party found with that id"
-          });
+        } 
+        return res.status(200).json({
+            status: 200,
+            data: [rows[0]]
+        });
+      } catch(error) {
+        const { message } = error;
+        return res.status(500).json({
+          status: 500,
+          message
+        });
       }
     }
-
 
   /**
    * @method deleteParty
@@ -87,26 +113,29 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-   static deleteParty (req, res) {
-      let id = req.params.id;
-
-      let data = partyDb.filter( data => {
-      return data.id == id;
-      })[0];
-
-      const index = partyDb.indexOf(data);
-
-      if(index !== -1){
-
-      partyDb.splice(index, 1);
-
-      res.status(200).json({ 
-        status: 200,
-        data: [{message: `Party with id ${id} deleted.`}]});
-      } else {
-        res.status(201).json({ 
-        message: `Party with id ${id} not found.`});
+   static async deleteParty (req, res) {
+     const id = parseInt(req.params.id, 10);
+     const data = 'DELETE FROM parties WHERE id = $1';
+     try {
+      const { rows } = await db.query(data, [id]);
+      if(rows){
+        return res.status(200).json({
+          status: 200,
+          message: "Party with id deleted"
+        });
       }
+        return res.status(404).json({
+          status: 404,
+          error: "Party with that id not found"
+        });
+
+    } catch(error) {
+      const { message } = error;
+      return res.status(500).json({
+        status: 500,
+        message
+      });
+    }
   }
   
   /**
@@ -116,24 +145,41 @@ class PartyController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-  static updatePartyName (req, res) {
-      const { id } = req.params;
-      const data = partyDb.find(data=> data.id == id);
-      if(data){
-        data.name = req.body.name;
-        return res.status(201).send({
-        status: 201,
-        message: "party name updated successfully",
-        data: [data]
-      });
-    } else {
-        return res.status(404).send({
-        status: 404,
-        error: "name of party not found!"
-      });
-    }
-  }
 
+  static async updatePartyName (req, res) {
+      let id = parseInt(req.params.id, 10);
+      const { name } = req.body;
+      const findData = 'SELECT * FROM parties WHERE id=$1';
+      const data = 'UPDATE parties SET name = $1 WHERE id = $2';
+      try {
+        const { rows } = await db.query(findData,  [id]);
+        console.log(rows);
+        if(!rows[0]){
+          return res.status(404).json({
+            status: 404,
+            message: "Party with id not found" 
+          });
+        } 
+        const values = [
+          req.body.name,
+          id
+        ];
+        const result = await db.query(data, values);
+        console.log(result);
+        if(result.rowCount === 1){
+        return res.status(200).json({
+            status: 200,
+            message: "Name updated successfully"
+        });
+      } 
+    } catch(error) {
+        const { message } = error;
+        return res.status(500).json({
+          status: 500,
+          message
+        });
+      }
+   }
 }
 
 export default PartyController;
