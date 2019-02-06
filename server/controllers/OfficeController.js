@@ -1,4 +1,7 @@
-import officeDb from '../datastore/officeDb';
+import db from '../db/index';
+
+
+
 
 class OfficeController {
 
@@ -10,7 +13,7 @@ class OfficeController {
    * @returns {object} JSON API Response
    */
   
-  static createOffice (req, res) {
+  static async createOffice (req, res) {
       if(!req.body.type){
          return res.status(400).send({
          status: 400,
@@ -22,18 +25,25 @@ class OfficeController {
         error: "name of office is required"
       });
     }
-    const data = [{
-    id: officeDb.length + 1,
-    type: req.body.type,
-    name: req.body.name
-    }]
-    officeDb.push(data);
-    return res.status(201).send({
-    status: 201,
-    message: "Office added successfully",
-    data
-   });
- }
+    const { type, name } = req.body;
+    const data = 'INSERT INTO offices (type, name) VALUES($1, $2) RETURNING *';
+
+    try {
+        const { rows } = await db.query(data, [type, name]);
+        if (rows) {
+          return res.status(201).json({
+            status: 201,
+            data: rows
+          });
+        }
+    } catch(error) {
+      return res.status(500).json({
+        status: 500,
+        message: error.message
+      });
+    }
+  
+  }
 
   /**
    * @method getAllOffices
@@ -43,12 +53,20 @@ class OfficeController {
    * @returns {object} JSON API Response
    */
 
-  static getAllOffices (req, res) {
-    res.status(200).send({
-    status: 200,
-    message: "Offices retrieved successfully",
-    data: officeDb
-    });
+  static async getAllOffices (req, res) {
+    try {
+      const { rows } = await db.query('SELECT * FROM offices ORDER BY id ASC');
+      return res.status(200).json({
+        status: 200,
+        data: rows
+        });
+    } catch(error) {
+      const { message } = error;
+      return res.status(500).json({
+        status: 500,
+        message
+      });
+    }
   }
 
  /* @method getOffice
@@ -57,21 +75,31 @@ class OfficeController {
    * @param {object} res - The Response Object
    * @returns {object} JSON API Response
    */
-  static getOffice (req, res) {
-      const { id } = req.params;
-      let data = officeDb.find(data => data.id == id);
-      if (data) {
-          return res.status(200).send({
-          status: 200,
-          message: "party retrieved successfully",
-          data: [data]
+  static async getOffice (req, res) {
+      const data = 'SELECT * FROM offices WHERE id = $1';
+      let id = parseInt(req.params.id, 10);
+      try {
+        const { rows } = await db.query(data, [id]);
+        if(!rows[0]){
+          return res.status(404).json({
+            status: 404,
+            error: "Office with that id not found"
           });
-      } else {
-          res.status(404).send({
-          error: "No Office found with that id"
-          });
-       }
+        } 
+        return res.status(200).json({
+            status: 200,
+            data: [rows[0]]
+        });
+      } catch(error) {
+        const { message } = error;
+        return res.status(500).json({
+          status: 500,
+          message
+        });
+      }
     }
-}
+  }
+
+
 
 export default OfficeController;
