@@ -1,7 +1,7 @@
 import express from 'express';
 import PartyController from '../controllers/PartyController';
 import OfficeController from '../controllers/OfficeController';
-
+import UserController from '../controllers/userController';
 const router = express.Router();
 
 //Setting default response by Heroku
@@ -37,5 +37,7 @@ router.get('/api/v1/offices', OfficeController.getAllOffices);
 //get a specific party
 router.get('/api/v1/offices/:id', OfficeController.getOffice);
 
+//User signup
+router.post('/api/v1/auth/signup', UserController.createAccount);
 
 export default router;
