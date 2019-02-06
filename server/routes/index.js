@@ -37,7 +37,12 @@ router.get('/api/v1/offices', OfficeController.getAllOffices);
 //get a specific party
 router.get('/api/v1/offices/:id', OfficeController.getOffice);
 
+//SET UP ENPOINTS FOR USER
+
 //User signup
 router.post('/api/v1/auth/signup', UserController.createAccount);
+
+//User signin
+router.post('/api/v1/auth/login', UserController.loginAccount);
 
 export default router;
