@@ -63,7 +63,7 @@ Politico is a platform that enables citizens give their mandate to politicians r
 Follow the steps below to get the app running locally:
 ```
 # Clone the repository
->$ git clone https://github.com/danoseun/new-weconnect.git
+>$ git clone https://github.com/mekzy-o/Politico
 
 # Change directory into it
 >$ cd Politico
@@ -112,9 +112,6 @@ Contributions are welcome and appreciated. To contribute
 #### Who can contribute?
     Anyone!. This application is open to all those who want to contribute to open-source development and are willing to follow the set standards for contributing.
     
-//#### What language was used to develop this application?
-   // This project is a full stack Javascript application(in view)
-    
 
 #### What format is the API response in?
     The API response is in JSON format
@@ -123,7 +120,7 @@ Contributions are welcome and appreciated. To contribute
 * The application will run on a single database and might impact the speed of response
 * Users cannot register or login with their social accounts at the moment
 ## Credits
-StackOverflow
-Reddit
-Andela
-Google
+* StackOverflow
+* Reddit
+* Andela
+* Google
