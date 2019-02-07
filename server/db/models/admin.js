@@ -8,9 +8,7 @@ const queryTable = 'INSERT INTO users (email, password, firstname, lastname, oth
 
 const password = process.env.PASSWORD;
 
-const saltRounds = 10;
-
-const newPassword = bcrypt.hashSync(password, saltRounds);
+const newPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
 const email = process.env.EMAIL;
 
