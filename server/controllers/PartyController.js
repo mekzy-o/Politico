@@ -16,6 +16,17 @@ class PartyController {
    * @returns {object} JSON API Response
    */
   static async createParty (req, res) {
+
+    const pattern = /^[a-z]{3,40}$/i;
+    const isValid =  pattern.test(req.body.name);
+
+    const hqPattern = /^[a-z]{3,50}$/i;
+    const validity =  hqPattern.test(req.body.hqaddress);
+
+    const logoPattern = /^[a-z]{3,20}$/i;
+    const valid =  logoPattern.test(req.body.logourl);
+
+
       if(!req.body.name){
         return res.status(400).send({
         status: 400,
@@ -31,6 +42,21 @@ class PartyController {
       status: 400,
       error: "Logo Url of party is required"
   });
+} else if (validity === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid hqaddress entered"
+ });
+}  else if (isValid === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid name of party entered"
+ });
+} else if (valid === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid logourl of party entered"
+ });
 }
 
     const data = 'INSERT INTO parties(name, hqaddress, logourl) VALUES($1, $2, $3) RETURNING *'; 
