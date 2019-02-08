@@ -14,6 +14,12 @@ class OfficeController {
    */
   
   static async createOffice (req, res) {
+    const pattern = /^[a-z]{5,20}$/i;
+    const isValid =  pattern.test(req.body.name);
+
+    const typePattern = /^[a-z]{5,20}$/i;
+    const validity =  typePattern.test(req.body.type);
+
       if(!req.body.type){
          return res.status(400).send({
          status: 400,
@@ -24,6 +30,16 @@ class OfficeController {
         status: 400,
         error: "name of office is required"
       });
+    } else if (validity === false){
+      return res.status(400).send({
+        status: 400,
+        error: "invalid type of office entered"
+     });
+    }  else if (isValid === false){
+      return res.status(400).send({
+        status: 400,
+        error: "invalid name of office entered"
+     });
     }
     const { type, name } = req.body;
     const data = 'INSERT INTO offices (type, name) VALUES($1, $2) RETURNING *';
