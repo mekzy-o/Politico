@@ -25,7 +25,85 @@ class UserController {
       req.body.phonenumber,
       req.body.passporturl
     ];
+
+    const pattern = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,5})(\.[a-z]{2,8})?$/;
+    const isValid = pattern.test(req.body.email);
+
+    const phonePattern = /^\d{11}$/;
+    const valid = phonePattern.test(req.body.phonenumber);
+
+    const firstnamePattern = /^[a-z]{5,15}$/i;
+    const validity =  firstnamePattern.test(req.body.firstname);
+
+    const lastnamePattern = /^[a-z]{3,15}$/i;
+    const lastValidity =  lastnamePattern.test(req.body.lastname);
+
+    const othernamePattern = /^[a-z]{5,15}$/i;
+    const otherValidity =  othernamePattern.test(req.body.othername);
+
+    if(!req.body.email){
+      return res.status(400).send({
+      status: 400,
+      error: "email is required"
+    });
+  } else if (!req.body.password){
+    return res.status(400).send({
+    status: 400,
+    error: "password is required"
+  });
+  } else if (!req.body.firstname){
+    return res.status(400).send({
+    status: 400,
+    error: "firstname is required"
+  });
+} else if (!req.body.lastname){
+  return res.status(400).send({
+  status: 400,
+  error: "lastname is required"
+  });
+} else if (!req.body.othername){
+  return res.status(400).send({
+  status: 400,
+  error: "othername is required"
+  });
+} else if (!req.body.phonenumber){
+  return res.status(400).send({
+  status: 400,
+  error: "phonenumber is required"
+  });
+} else if (!req.body.passporturl){
+  return res.status(400).send({
+  status: 400,
+  error: "passporturl is required"
+  });
+} else if (valid === false) {
+   return res.status(400).send({
+     status: 400,
+     error: "invalid phone number"
+  });
+} else if (isValid === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid email address"
+ });
+} else if (validity === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid first name entered"
+ });
+} else if (lastValidity === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid last name entered"
+ });
+} else if (otherValidity === false){
+  return res.status(400).send({
+    status: 400,
+    error: "invalid other name entered"
+ });
+}
     const data = 'INSERT INTO users(email, password, firstname, lastname, othername, phonenumber, passporturl) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
+  
     try {
       const result = await db.query(data, variables);
       const authUser = result.rows[0];
@@ -79,7 +157,7 @@ class UserController {
           }
         } catch (error) {
           res.status(500).json({
-            status: 'Fail',
+            status: 500,
             message: error.message
           });
         }
